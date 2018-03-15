@@ -1,0 +1,29 @@
+.chart-header-xs {
+    width: 22px;
+    height: 22px;
+    padding: 0px;
+}
+
+.chart-header-input-m {
+    max-width: 160px;
+    height: 22px;
+    font-size: 12px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.chart-header-input-sm {
+    max-width: 80px;
+    height: 22px;
+    font-size: 12px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.chart-header-input-xs {
+    max-width: 40px;
+    height: 22px;
+    font-size: 12px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
