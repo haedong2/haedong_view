@@ -8,7 +8,6 @@ from chart_viewer.models import get_chart_data
 
 
 def index(request):
-
     return render(request, 'chart_viewer/index.html', {})
 
 
