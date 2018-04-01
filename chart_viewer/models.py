@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.base import ModelBase
 
+
 def get_chart_data(start_date, end_date):
     query_string = """
     select Floor((result.row-1) / 60) + 1 as id
@@ -24,6 +25,20 @@ def get_chart_data(start_date, end_date):
     result = dictfetchall(cursor)
     return result
 
+
+def exist_table(subject_code):
+    query = """
+    show tables like '%s'
+    """ % subject_code
+
+    from django.db import connection
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+    result = dictfetchall(cursor)
+    return result
+
+
 def get_deposit_history():
     query_string = "select * from deposit_history"
 
@@ -34,6 +49,7 @@ def get_deposit_history():
     result = dictfetchall(cursor)
     return result
 
+
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
@@ -41,6 +57,7 @@ def dictfetchall(cursor):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
 
 def create_model(db_table):
     print("db_table: " + db_table)
@@ -52,11 +69,11 @@ def create_model(db_table):
             return model
 
     class CustomModel(models.Model, metaclass=CustomMetaClass):
-
         # define your fileds here
         date = models.CharField(max_length=14)
         open = models.CharField(max_length=9)
         high = models.CharField(max_length=9)
         low = models.CharField(max_length=9)
         close = models.CharField(max_length=9)
+
     return CustomModel

@@ -9,7 +9,7 @@ import pymysql
 # Create your views here.
 from django.template import RequestContext
 
-from chart_viewer.models import get_chart_data
+import chart_viewer.models as db
 from django.http import JsonResponse
 
 def index(request):
@@ -27,7 +27,7 @@ def get_data(request):
     start_date = request.GET['start_date']
     end_date = request.GET['end_date']
 
-    result = get_chart_data(start_date, end_date)
+    result = db.get_chart_data(start_date, end_date)
 
     for i in range(0, len(result)):
         temp_result = result[i]
@@ -37,3 +37,13 @@ def get_data(request):
     print('processing time : %s' % (proc_end_time - proc_start_time))
 
     return JsonResponse({'candles': result[:1000]})
+
+
+def exist_table(request, subject_code):
+    print('exsit_table? %s' % subject_code)
+    res = db.exist_table(subject_code)
+
+    if len(res) > 0:
+        return HttpResponse(True)
+
+    return HttpResponse(False)
