@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.base import ModelBase
 
-def get_chart_data():
+def get_chart_data(start_date, end_date):
     query_string = """
     select Floor((result.row-1) / 60) + 1 as id
         , max(case when mod((result.row-1), 60) = 0 then date end) as date

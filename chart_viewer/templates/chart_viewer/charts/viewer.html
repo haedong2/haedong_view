@@ -96,130 +96,37 @@
 
 
     <script type="text/javascript">
+        $(function () {
+            $("#fromDate").datepicker({
+                setdate: new Date(),
+                autoclose: true,
+            });
+            $('#toDate').datepicker({
+                autoclose: true,
+            });
+            $('#btnPrev').click(function () {
+                $("#fromDate").datepicker("update", getDateByOffset($("#fromDate").datepicker('getDate').val(), -1));
+            });
+            $('#btnNext').click(function () {
+                $("#toDate").datepicker("update", getDateByOffset($("#toDate").datepicker('getDate').val(), 1));
+            });
 
+        });
         $('#btn_day').click(function () {
-                $.ajax({
-                    method : 'GET',
-                    url: '/get_chart/',
-                    data: {},
-                    success: function (data) {
-                        console.log(data);
-                    }
-                });
-                console.log("data request");
-
-                {#var candle = {{ data|safe }};#}
-                {#console.log(candle);#}
-                return;
-                $(function () {
-                    $("#fromDate").datepicker({
-                        setdate: new Date(),
-                        autoclose: true,
-                    });
-                    $('#toDate').datepicker({
-                        autoclose: true,
-                    });
-                    $('#btnPrev').click(function () {
-                        $("#fromDate").datepicker("update", getDateByOffset($("#fromDate").datepicker('getDate').val(), -1));
-                    });
-                    $('#btnNext').click(function () {
-                        $("#toDate").datepicker("update", getDateByOffset($("#toDate").datepicker('getDate').val(), 1));
-                    });
-
-                    setTimestamp(candle);
-
-                    // calc sma 30
-                    calcSma(candle, 30);
-                    calcSma(candle, 60);
-
-                    // create the chart
-                    Highcharts.setOptions({
-                        time: {
-                            useUTC: false
+                var from_date = $('#fromDate').val();
+                var to_date = $('#toDate').val();
+                if (from_date != '' && to_date != '') {
+                    $.ajax({
+                        method: 'GET',
+                        url: '/get_chart/',
+                        data: {start_date : from_date, end_date : to_date},
+                        success: function (data) {
+                            var candle = data.candles;
+                            render_chart(candle);
                         }
                     });
-                    Highcharts.stockChart('container', {
-                        rangeSelector: {
-                            allButtonsEnabled: true,
-                            buttons: [{
-                                type: 'day',
-                                count: 1,
-                                text: 'Day'
-                            }, {
-                                type: 'week',
-                                count: 1,
-                                text: 'Week'
-                            }, {
-                                type: 'all',
-                                text: 'Month'
-                            }],
-                            buttonTheme: {
-                                width: 60
-                            },
-                            selected: 2
-                        },
+                }
 
-                        xAxis: {
-                            type: 'datetime',
-                            dateTimeLabelFormats: {
-                                day: '%m/%e %H:%M'
-                            },
-                            plotBands: [
-                                {
-                                    from: 1510527600000,
-                                    to: 1510742542000,
-                                    color: '#E6F9FF'
-                                },
-                                {
-                                    from: 1510742542000,
-                                    to: 1511742542000,
-                                    color: '#FFE5DB'
-                                }
-                            ]
-                        },
-                        yAxis: {},
-                        plotOptions: {
-                            series: {
-                                dataGrouping: {
-                                    enabled: false
-                                }
-                            },
-                            candlestick: {
-                                lineColor: 'black',
-                                color: '#115BCB',
-                                upColor: '#E71909',
-                            }
-                        },
-                        series: [{
-                            type: 'candlestick',
-                            name: 'Gold Candlestick',
-                            data: candle,
-                            dataGrouping: {
-                                enabled: false
-                            }
-                        }, {
-                            type: 'line',
-                            name: 'MA 30',
-                            data: indicator.SMA[30],
-                            dataGrouping: {
-                                enabled: false
-                            },
-                            color: 'red'
-                        }, {
-                            type: 'scatter',
-                            name: 'MA 60',
-                            data: indicator.SMA[60],
-                            dataGrouping: {
-                                enabled: false
-                            },
-                            color: 'green',
-                            marker: {
-                                radius: 1.5
-                            }
-                        }]
-                        //}, callback);
-                    });
-                });
 
                 {#var i = 0, series = chart.series[0];#}
                 {#data = usdeur.splice(0, 100);#}
@@ -229,15 +136,6 @@
             }
         );
 
-        {#var candle = [#}
-        {#    [#}
-        {#        1510883191000,  //시간#}
-        {#        1282.6, // 시가#}
-        {#        1282.6, // high#}
-        {#        1282.3, // low#}
-        {#        1282.5  // close#}
-        {#    ]#}
-        {#];#}
 
         /*
                 function callback(chart) {
@@ -257,6 +155,104 @@
                 }
 
                 */
+
+        function render_chart(candle) {
+            console.log(candle);
+
+            setTimestamp(candle);
+
+            // calc sma 30
+            calcSma(candle, 30);
+            calcSma(candle, 60);
+
+            // create the chart
+            Highcharts.setOptions({
+                time: {
+                    useUTC: false
+                }
+            });
+            Highcharts.stockChart('container', {
+                rangeSelector: {
+                    allButtonsEnabled: true,
+                    buttons: [{
+                        type: 'day',
+                        count: 1,
+                        text: 'Day'
+                    }, {
+                        type: 'week',
+                        count: 1,
+                        text: 'Week'
+                    }, {
+                        type: 'all',
+                        text: 'Month'
+                    }],
+                    buttonTheme: {
+                        width: 60
+                    },
+                    selected: 2
+                },
+
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        day: '%m/%e %H:%M'
+                    },
+                    plotBands: [
+                        {
+                            from: 1510527600000,
+                            to: 1510742542000,
+                            color: '#E6F9FF'
+                        },
+                        {
+                            from: 1510742542000,
+                            to: 1511742542000,
+                            color: '#FFE5DB'
+                        }
+                    ]
+                },
+                yAxis: {},
+                plotOptions: {
+                    series: {
+                        dataGrouping: {
+                            enabled: false
+                        }
+                    },
+                    candlestick: {
+                        lineColor: 'black',
+                        color: '#115BCB',
+                        upColor: '#E71909',
+                    }
+                },
+                series: [{
+                    type: 'candlestick',
+                    name: 'Gold Candlestick',
+                    data: candle,
+                    dataGrouping: {
+                        enabled: false
+                    }
+                }, {
+                    type: 'line',
+                    name: 'MA 30',
+                    data: indicator.SMA[30],
+                    dataGrouping: {
+                        enabled: false
+                    },
+                    color: 'red'
+                }, {
+                    type: 'scatter',
+                    name: 'MA 60',
+                    data: indicator.SMA[60],
+                    dataGrouping: {
+                        enabled: false
+                    },
+                    color: 'green',
+                    marker: {
+                        radius: 1.5
+                    }
+                }]
+                //}, callback);
+            });
+        }
 
         function getDateByOffset(date, offset) {
             var _date = new Date(date);
@@ -299,6 +295,11 @@
             }
             return -1;
         }
+
+        var indicator = {
+            SMA: {},
+        };
+
     </script>
 
 {% endblock %}
