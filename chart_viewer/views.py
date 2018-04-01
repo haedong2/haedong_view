@@ -24,10 +24,16 @@ def get_data(request):
     proc_start_time = time.time()
     print('request params %s' % request.GET)
 
-    start_date = request.GET['start_date']
-    end_date = request.GET['end_date']
+    subject_code = request.GET['subject_code']
+    start_date = request.GET['start_date'].split('/')
+    start_date = '%s-%s-%s' % (start_date[2], start_date[0], start_date[1])
+    end_date = request.GET['end_date'].split('/')
+    end_date = '%s-%s-%s' % (end_date[2], end_date[0], end_date[1])
 
-    result = db.get_chart_data(start_date, end_date)
+    if request.GET['chart_type'] == 'tick':
+        result = db.get_tick_data(subject_code, int(request.GET['time_unit']), start_date, end_date)
+    else:
+        pass
 
     for i in range(0, len(result)):
         temp_result = result[i]
@@ -36,14 +42,17 @@ def get_data(request):
 
     print('processing time : %s' % (proc_end_time - proc_start_time))
 
-    return JsonResponse({'candles': result[:1000]})
+    return JsonResponse({'candles': result})
 
 
 def exist_table(request, subject_code):
     print('exsit_table? %s' % subject_code)
     res = db.exist_table(subject_code)
 
-    if len(res) > 0:
-        return HttpResponse(True)
+    return HttpResponse(res)
 
-    return HttpResponse(False)
+
+def get_subject_date(request, subject_code):
+    res = db.get_subject_date(subject_code)
+
+    return JsonResponse(res[0])
