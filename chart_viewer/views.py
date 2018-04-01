@@ -10,7 +10,7 @@ import pymysql
 from django.template import RequestContext
 
 from chart_viewer.models import get_chart_data
-
+from django.http import JsonResponse
 
 def index(request):
     return render(request, 'chart_viewer/index.html', {})
@@ -21,6 +21,7 @@ def viewer(request):
 
 
 def get_data(request):
+    print('request params %s' % request)
     start_time = time.time()
     result = get_chart_data()
 
@@ -29,5 +30,7 @@ def get_data(request):
         result[i] = [temp_result['date'], temp_result['open'], temp_result['high'], temp_result['low'], temp_result['close']]
     end_time = time.time()
 
-    return render(request, {'data': result[:1000]})
+    print('return data')
+    return JsonResponse({'candles': result[-1000:]})
+
     # return render(request, 'chart_viewer/chart/viewer.html', {'data': result[:8000]})

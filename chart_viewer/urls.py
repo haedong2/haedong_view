@@ -4,5 +4,5 @@ from . import views
 urlpatterns = [
     path('', views.index),
     path('chart', views.viewer),
-    path('get_chart', views.get_data)
+    path('get_chart/', views.get_data)
 ]
