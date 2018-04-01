@@ -1,9 +1,14 @@
+import time
+from turtledemo.penrose import star
+
 from django.shortcuts import render
 from django.http import HttpResponse
 import pymysql
 
 
 # Create your views here.
+from django.template import RequestContext
+
 from chart_viewer.models import get_chart_data
 
 
@@ -11,20 +16,18 @@ def index(request):
     return render(request, 'chart_viewer/index.html', {})
 
 
-def chart(request):
+def viewer(request):
     return render(request, 'chart_viewer/charts/viewer.html', {})
 
 
-def get_chart(request):
+def get_data(request):
+    start_time = time.time()
     result = get_chart_data()
-
-    # for i in range(0, len(result)):
-    #     result[i]['date'] = str(result[i]['date'])
-    #     result[i]['date'] = result[i]['date'][0:4] + result[i]['date'][4:6] + result[i]['date'][6:12]
-    #     result[i].pop('id', None)
 
     for i in range(0, len(result)):
         temp_result = result[i]
         result[i] = [temp_result['date'], temp_result['open'], temp_result['high'], temp_result['low'], temp_result['close']]
+    end_time = time.time()
 
-    return render(request, 'chart_viewer/charts/viewer.html', {'data': result[:1000]})
+    return render(request, {'data': result[:1000]})
+    # return render(request, 'chart_viewer/chart/viewer.html', {'data': result[:8000]})

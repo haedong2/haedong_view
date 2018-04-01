@@ -11,7 +11,7 @@ def get_chart_data():
         , max(case when mod((result.row-1), 60) = 59 then price end) as close
           from (select @rownum:=@rownum+1 as row
                       , price , cast(date as unsigned) as date
-                 from GCJ17 
+                 from GCJ17
                   , (select @rownum:=0) R
                )result
                  group by Floor((result.row-1) / 60)
