@@ -5,12 +5,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import pymysql
 
-
 # Create your views here.
 from django.template import RequestContext
 
 import chart_viewer.models as db
 from django.http import JsonResponse
+
 
 def index(request):
     return render(request, 'chart_viewer/index.html', {})
@@ -20,7 +20,7 @@ def viewer(request):
     return render(request, 'chart_viewer/charts/viewer.html', {})
 
 
-def get_data(request):
+def get_data(request: dict):
     proc_start_time = time.time()
     print('request params %s' % request.GET)
 
@@ -37,10 +37,20 @@ def get_data(request):
 
     for i in range(0, len(result)):
         temp_result = result[i]
-        result[i] = [temp_result['date'], temp_result['open'], temp_result['high'], temp_result['low'], temp_result['close']]
+        result[i] = [temp_result['date'], temp_result['open'], temp_result['high'], temp_result['low'],
+                     temp_result['close']]
     proc_end_time = time.time()
 
     print('processing time : %s' % (proc_end_time - proc_start_time))
+
+    if 'offset' in request.GET.keys():
+        offset = int(request.GET['offset'])
+        if offset > 0:
+            print('%d ~ %d' % (offset * 10 - 10, (offset * 10 - 10) + 9))
+            return JsonResponse({'candles': result[offset * 10 - 10:(offset * 10 - 10) + 9]})
+        else:
+            print('%d ~ %d' % ((offset * 10 + 9) - 9, offset * 10 + 9))
+            return JsonResponse({'candles': result[(offset * 10 + 9) - 9:offset * 10 + 9]})
 
     return JsonResponse({'candles': result})
 

@@ -84,7 +84,7 @@ def get_tick_data(subject_code, time_unit, start_date, end_date):
         ;
         ''' % (time_unit, time_unit, time_unit, subject_code, start_date, end_date, time_unit, subject_code, subject_code)
 
-    print(query)
+    # print(query)
     cursor = connection.cursor()
     cursor.execute(query)
     result = dictfetchall(cursor)
