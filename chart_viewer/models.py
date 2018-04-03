@@ -86,10 +86,54 @@ def get_tick_data(subject_code, time_unit, start_date, end_date):
 
     print(query)
     cursor = connection.cursor()
-    res = cursor.execute(query)
+    cursor.execute(query)
     result = dictfetchall(cursor)
     return result
 
+
+def get_hour_data(subject_code, time_unit, start_date='2017-01-01', end_date='2020-12-31'):
+    return get_min_data(subject_code, int(time_unit) * 60, start_date, end_date)
+
+
+def get_min_data(subject_code, time_unit, start_date='2017-01-01', end_date='2020-12-31'):
+    sec = int(time_unit) * 60
+    query = '''
+    SELECT 
+        T1.date * 1000 as date,
+        T2.price as open,
+        T1.high,
+        T1.low,
+        T3.price as close,
+        T1.volume,
+        T1.working_day
+    FROM
+        (
+        SELECT
+            FLOOR(UNIX_TIMESTAMP(date) / %s) * %s AS date,
+            MIN(id) as open_id,
+            MAX(price) AS high,
+            MIN(price) AS low,
+            MAX(id) as close_id,
+            SUM(volume) AS volume,
+            working_day
+        FROM %s
+        WHERE working_day between '%s' and '%s'
+        GROUP BY FLOOR(UNIX_TIMESTAMP(date)/%s)
+        ORDER BY date
+        ) T1
+        INNER JOIN
+        %s T2
+        ON T1.open_id = T2.id
+        INNER JOIN
+        %s T3
+        ON T1.close_id = T3.id            
+    ''' % (sec, sec, subject_code, start_date, end_date, sec, subject_code, subject_code)
+
+    print(query)
+    cursor = connection.cursor()
+    cursor.execute(query)
+    result = dictfetchall(cursor)
+    return result
 
 def exist_table(subject_code):
     query = """

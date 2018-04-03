@@ -33,7 +33,7 @@ def get_data(request):
     if request.GET['chart_type'] == 'tick':
         result = db.get_tick_data(subject_code, int(request.GET['time_unit']), start_date, end_date)
     else:
-        pass
+        result = db.get_min_data(subject_code, int(request.GET['time_unit']), start_date, end_date)
 
     for i in range(0, len(result)):
         temp_result = result[i]
