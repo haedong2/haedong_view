@@ -43,15 +43,6 @@ def get_data(request: dict):
 
     print('processing time : %s' % (proc_end_time - proc_start_time))
 
-    if 'offset' in request.GET.keys():
-        offset = int(request.GET['offset'])
-        if offset > 0:
-            print('%d ~ %d' % (offset * 10 - 10, (offset * 10 - 10) + 9))
-            return JsonResponse({'candles': result[offset * 10 - 10:(offset * 10 - 10) + 9]})
-        else:
-            print('%d ~ %d' % ((offset * 10 + 9) - 9, offset * 10 + 9))
-            return JsonResponse({'candles': result[(offset * 10 + 9) - 9:offset * 10 + 9]})
-
     return JsonResponse({'candles': result})
 
 

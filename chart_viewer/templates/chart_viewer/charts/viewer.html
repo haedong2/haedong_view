@@ -2,501 +2,487 @@
 {% load staticfiles %}
 
 {% block contents %}
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Futures Charts</h1>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Futures Charts</h1>
+            </div>
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="btn-group">
-                        <div class="input-group">
-                            <input id="input_subject_code" type="text" class="form-control chart-header-input-sm">
-                            <span class="input-group-addon chart-header-xs">
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="btn-group">
+                            <div class="input-group">
+                                <input id="input_subject_code" type="text" class="form-control chart-header-input-sm">
+                                <span class="input-group-addon chart-header-xs">
                                     <i class="fa fa-search"></i>
                                 </span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="btn-group">
-                        <input type="text" class="form-control chart-header-input-sm" readonly value="Gold">
-                    </div>
+                        <div class="btn-group">
+                            <input type="text" class="form-control chart-header-input-sm" readonly value="Gold">
+                        </div>
 
-                    <div class="btn-group" data-toggle="buttons">
-                        <label id="btnDay" class="btn btn-default btn-sm" disabled>
-                            <input type="radio">일</input>
-                        </label>
-                        <label id="btnWeek" class="btn btn-default btn-sm" disabled>
-                            <input type="radio">주</input>
-                        </label>
-                        <label id="btnMonth" class="btn btn-default btn-sm" disabled>
-                            <input type="radio">월</input>
-                        </label>
-                        <label id="btnTick" class="btn btn-default btn-sm active">
-                            <input type="radio" checked>틱</input>
-                        </label>
-                        <label id="btnMin" class="btn btn-default btn-sm">
-                            <input type="radio">분</input>
-                        </label>
-                    </div>
+                        <div class="btn-group" data-toggle="buttons">
+                            <label id="btnDay" class="btn btn-default btn-sm">
+                                <input type="radio">일</input>
+                            </label>
+                            <label id="btnWeek" class="btn btn-default btn-sm" disabled>
+                                <input type="radio">주</input>
+                            </label>
+                            <label id="btnMonth" class="btn btn-default btn-sm" disabled>
+                                <input type="radio">월</input>
+                            </label>
+                            <label id="btnTick" class="btn btn-default btn-sm active">
+                                <input type="radio" checked>틱</input>
+                            </label>
+                            <label id="btnMin" class="btn btn-default btn-sm">
+                                <input type="radio">분</input>
+                            </label>
+                        </div>
 
-                    <div class="btn-group" data-toggle="buttons">
-                        <label id="btn60Tick" class="btn btn-default btn-sm active">
-                            <input type="radio" checked>60 tick</input>
-                        </label>
-                        <label id="btn120Tick" class="btn btn-default btn-sm">
-                            <input type="radio">120 tick</input>
-                        </label>
-                    </div>
 
-                    <div class="btn-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control chart-header-input-sm" maxlength="3">
-                            <span class="input-group-addon chart-header-xs">
+                        <!-- dynamic tick menu -->
+                        <div class="btn-group" data-toggle="buttons">
+                            <label id="btn30Tick" class="btn btn-default btn-sm" style="width: 40px">
+                                <input type="radio">30</input>
+                            </label>
+                            <label id="btn60Tick" class="btn btn-default btn-sm active" style="width: 40px">
+                                <input type="radio" checked>60</input>
+                            </label>
+                            <label id="btn120Tick" class="btn btn-default btn-sm" style="width: 40px">
+                                <input type="radio">120</input>
+                            </label>
+                        </div>
+
+
+                        <div class="btn-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control chart-header-input-sm" maxlength="3">
+                                <span class="input-group-addon chart-header-xs">
                                 <i class="fa fa-check"></i>
                             </span>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" id="btnPrev" class="btn btn-default btn-sm"><i
+                                    class="fa fa-arrow-left"></i></button>
+                            <button type="button" id="btnNext" class="btn btn-default btn-sm"><i
+                                    class="fa fa-arrow-right"></i></button>
+                            <button type="button" class="btn btn-default btn-sm" id="chartView"><i
+                                    class="fa fa-bar-chart"></i></button>
+                        </div>
+
+                        <div class="btn-group">
+                            <div class='input-group date'>
+                                <input type='text' class="form-control chart-header-input-sm" id='fromDate'>
+                            </div>
+                        </div>
+
+                        <div class="btn-group" id="multipleDayFrame" style="visibility: hidden">
+                            <div class="btn-group">
+                                ~
+                            </div>
+
+                            <div class="btn-group">
+                                <div class='input-group date'>
+                                    <input type='text' class="form-control chart-header-input-sm" id='toDate'>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
 
-                    <div class="btn-group">
-                        <button type="button" id="btnPrev" class="btn btn-default btn-sm"><i
-                                class="fa fa-arrow-left"></i></button>
-                        <button type="button" id="btnNext" class="btn btn-default btn-sm"><i
-                                class="fa fa-arrow-right"></i></button>
-                        <button type="button" class="btn btn-default btn-sm" id="chartView"><i
-                                class="fa fa-bar-chart"></i></button>
-                    </div>
+                        <div id="container" style="height:600px;"></div>
 
-                    <div class="btn-group">
-                        <div class='input-group date'>
-                            <input type='text' class="form-control chart-header-input-sm" id='fromDate'>
-                            <!--<span class="input-group-addon chart-header-xs">-->
-                            <!--<span class="glyphicon glyphicon-calendar"></span>-->
-                            <!--</span>-->
-                        </div>
                     </div>
-
-                    <div class="btn-group">
-                        ~
-                    </div>
-
-                    <div class="btn-group">
-                        <div class='input-group date'>
-                            <input type='text' class="form-control chart-header-input-sm" id='toDate'>
-                            <!--<span class="input-group-addon chart-header-xs">-->
-                            <!--<span class="glyphicon glyphicon-calendar"></span>-->
-                            <!--</span>-->
-                        </div>
-                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-
-                    <div id="container" style="height:600px;"></div>
-
-                </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
         </div>
+        <!-- /.row -->
     </div>
-    <!-- /.row -->
-</div>
 
 
-<script type="text/javascript">
-    var chartType = 'tick';
-    var timeUnit = 60;
-    var prevOffset = 0;
-    var nextOffset = 0;
+    <script type="text/javascript">
+        var chartType = 'tick';
+        var timeUnit = 60;
+        var chart;
 
-    $(document).ready(function() {
-        $('#btnDay').click(function () {
-            chartType = 'day';
-        });
-        $('#btnWeek').click(function () {
-            chartType = 'week';
-        });
-        $('#btnMonth').click(function () {
-            chartType = 'month';
-        });
-        $('#btnTick').click(function () {
-            chartType = 'tick';
-        });
-        $('#btnMin').click(function () {
-            chartType = 'min';
-        });
-
-        $('#btn60Tick').click(function () {
-            timeUnit = 60;
-        });
-        $('#btn120Tick').click(function () {
-            timeUnit = 120;
-        });
-
-        $('#btnPrev').click(function () {
-            var series = chart.series[0];
-
-            for (i = 0; i < 1000; i ++) {
-                series.addPoint([
-                Math.random(),
-                Math.random()*100,
-                Math.random()*100,
-                Math.random()*100,
-                Math.random()*100
-                ], true, true);
-            }
-            chart.redraw();
-
-            <!--$("#fromDate").datepicker("update", getDateByOffset($("#fromDate").datepicker('getDate').val(), -1));-->
-        });
-        $('#btnNext').click(function () {
-            <!--$("#toDate").datepicker("update", getDateByOffset($("#toDate").datepicker('getDate').val(), 1));-->
-        });
-    });
-
-    $(function () {
-        $('#input_subject_code').on("input", function () {
-            var subject_code = $('#input_subject_code').val();
-
-            $.ajax({
-                method: 'GET',
-                url: '/api/exist-table/' + subject_code,
-                success: function (result) {
-                    if (result == 'True') {
-                        $('#input_subject_code').parent().removeClass('has-error');
-
-                        $.ajax({
-                            method: 'GET',
-                            url: '/api/' + subject_code + '/date',
-                            success: function(data) {
-                                var start_date = new Date(data.start_date);
-                                var end_date = new Date(data.end_date);
-                                $('#fromDate').datepicker({
-                                    defaultDate: start_date,
-                                    minDate: start_date,
-                                    maxDate: end_date,
-                                    autoClose: true,
-                                });
-
-                                $('#toDate').datepicker({
-                                    defaultDate: end_date,
-                                    minDate: start_date,
-                                    maxDate: end_date,
-                                    autoClose: true,
-                                });
-
-                                var defaultFromDate = $('#fromDate').datepicker('option','defaultDate');
-                                var defaultToDate = $('#toDate').datepicker('option','defaultDate');
-
-                                $('#fromDate').val(defaultFromDate.getMonth()+1 + "/" + defaultFromDate.getDate() + "/" + defaultFromDate.getFullYear());
-                                $('#toDate').val(defaultToDate.getMonth()+1 + "/" + defaultToDate.getDate() + "/" + defaultToDate.getFullYear());
-                            }
-                        });
-                    } else {
-                        $('#input_subject_code').parent().addClass('has-error');
-                    }
-                }
+        $(document).ready(function () {
+            $('#btnDay').click(function () {
+                chartType = 'day';
+                $('#btn30Tick').attr('disabled', 'disabled');
+                $('#btn60Tick').attr('disabled', 'disabled');
+                $('#btn120Tick').attr('disabled', 'disabled');
+                $('#btn30Tick').click(false);
+                $('#btn60Tick').click(false);
+                $('#btn120Tick').click(false);
+                $('#multipleDayFrame').css('visibility', 'visible');
             });
-        });
-    });
 
+            $('#btnWeek').click(function () {
+                chartType = 'week';
+                $('#btn30Tick').attr('disabled', 'disabled');
+                $('#btn60Tick').attr('disabled', 'disabled');
+                $('#btn120Tick').attr('disabled', 'disabled');
+                $('#btn30Tick').click(false);
+                $('#btn60Tick').click(false);
+                $('#btn120Tick').click(false);
+                $('#multipleDayFrame').css('visibility', 'visible');
+            });
 
-    $('#chartView').click(function () {
-        /* 유효성 체크 */
-        if($('#fromDate') == undefined || $('#toDate') == undefined ||
-            $('#fromDate').val() == '' || $('#toDate').val() == '')
-            return;
+            $('#btnMonth').click(function () {
+                chartType = 'month';
+                $('#btn30Tick').attr('disabled', 'disabled');
+                $('#btn60Tick').attr('disabled', 'disabled');
+                $('#btn120Tick').attr('disabled', 'disabled');
+                $('#btn30Tick').click(false);
+                $('#btn60Tick').click(false);
+                $('#btn120Tick').click(false);
+                $('#multipleDayFrame').css('visibility', 'visible');
+            });
 
-        prevOffset = 0;
-        nextOffset = 0;
+            $('#btnTick').click(function () {
+                chartType = 'tick';
+                $('#btn30Tick').attr('disabled', 'disabled');
+                $('#btn30Tick').click(false);
+                $('#btn60Tick').removeAttr('disabled');
+                $('#btn120Tick').removeAttr('disabled');
+                $('#multipleDayFrame').css('visibility', 'hidden');
 
-        $.ajax({
-            method: 'GET',
-            url: '/get_chart/',
-            data: {
-                subject_code: $('#input_subject_code').val(),
-                chart_type: chartType,
-                time_unit: timeUnit,
-                start_date: $('#fromDate').val(),
-                end_date: $('#toDate').val(),
-                indicators: [],
-            },
-            success: function (data) {
-                var candles = data.candles;
-                initial_render_chart(candles);
-            }
-        });
-        }
-    );
+                // default click
+                $('#btn60Tick').click();
+            });
 
-    function addPrevData(series) {
-        var prevDay;
+            $('#btnMin').click(function () {
+                chartType = 'min';
+                $('#btn30Tick').removeAttr('disabled');
+                $('#btn60Tick').removeAttr('disabled');
+                $('#btn120Tick').attr('disabled', 'disabled');
+                $('#btn120Tick').click(false);
+                $('#multipleDayFrame').css('visibility', 'hidden');
 
-        if(prevOffset == 0) {
-            var startDay = $('#fromDate').val().split("/");
-            prevDay = new Date(startDay[2], startDay[0], startDay[1]);
-            prevDay = getDateByOffset(prevDay, -1);
-            prevDay = prevDay.getMonth() + "/" + prevDay.getDate() + "/" + prevDay.getFullYear();
-            $('#fromDate').val(prevDay);
+                // default click
+                $('#btn30Tick').click();
+            });
 
-        } else {
-            prevDay = $('#fromDate').val();
-        }
+            $('#btn30Tick').click(function () {
+                timeUnit = 30;
+            });
 
-        prevOffset++;
+            $('#btn60Tick').click(function () {
+                timeUnit = 60;
+            });
 
-        $.ajax({
-            method: 'GET',
-            url: '/get_chart/',
-            data: {
-                subject_code: $('#input_subject_code').val(),
-                chart_type: chartType,
-                time_unit: timeUnit,
-                start_date: prevDay,
-                end_date: prevDay,
-                offset: prevOffset * -1,
-                indicators: [],
-            },
-            success: function (data) {
-                newData = data.candles;
-                console.log(newData);
-                var i;
-                for(i = 0 ; i < newData.length ; i++) {
-                    series.addPoint(newData[i]);
-                }
-            }
-        });
-    }
+            $('#btn120Tick').click(function () {
+                timeUnit = 120;
+            });
 
-    function addNextData(series) {
-        var nextDay;
+            $('#btnPrev').click(function () {
+                chart.showLoading();
+                var targetDay = $('#fromDate').val().split("/");
+                targetDay = new Date(targetDay[2], targetDay[0], targetDay[1]);
+                targetDay = getDateByOffset(targetDay, -1);
+                targetDay = targetDay.getMonth() + "/" + targetDay.getDate() + "/" + targetDay.getFullYear();
+                $('#fromDate').val(targetDay);
+                $('#toDate').val(targetDay);
 
-        if(nextOffset == 0) {
-            var endDay = $('#toDate').val().split("/");
-            nextDay = new Date(endDay[2], endDay[0], endDay[1]);
-            nextDay = getDateByOffset(nextDay, 1);
-            nextDay = nextDay.getMonth() + "/" + nextDay.getDate() + "/" + nextDay.getFullYear();
-            $('#toDate').val(nextDay);
+                $.ajax({
+                    method: 'GET',
+                    url: '/get_chart/',
+                    data: {
+                        subject_code: $('#input_subject_code').val(),
+                        chart_type: chartType,
+                        time_unit: timeUnit,
+                        start_date: targetDay,
+                        end_date: targetDay,
+                        indicators: [],
+                    },
+                    success: function (data) {
+                        var newCandles = data.candles;
 
-        } else {
-            nextDay = $('#toDate').val();
-        }
-
-        nextOffset++;
-
-        $.ajax({
-            method: 'GET',
-            url: '/get_chart/',
-            data: {
-                subject_code: $('#input_subject_code').val(),
-                chart_type: chartType,
-                time_unit: timeUnit,
-                start_date: nextDay,
-                end_date: nextDay,
-                offset: nextOffset,
-                indicators: [],
-            },
-            success: function (data) {
-                newData = data.candles;
-                console.log(newData);
-                var i;
-                for(i = 0 ; i < newData.length ; i++) {
-                    series.addPoint(newData[i]);
-                }
-            }
-        });
-    }
-
-    function initial_render_chart(data) {
-        var candle = data;
-        var indicators = data.indicators;
-
-        setTimestamp(candle);
-
-        // calc sma 30
-        calcSma(candle, 30);
-        calcSma(candle, 60);
-
-        // create the chart
-        Highcharts.setOptions({
-            time: {
-                useUTC: false
-            }
-        });
-        Highcharts.stockChart('container', {
-
-            chart: {
-                type: 'candlestick',
-                margin: [70, 50, 60, 80],
-                events: {
-                    click: function (e) {
-                        // find the clicked values and the series
-                        var x = Math.round(e.xAxis[0].value),
-                            y = Math.round(e.yAxis[0].value),
-                            series = this.series[0];
-
-                        var newData;
-
-                        if(e.altKey == true && e.ctrlKey == true)
-                            return;
-                        else if(e.altKey == false && e.ctrlKey == false)
-                            return;
-                        else if(e.ctrlKey == true) {
-                            // ctrl + click
-                            console.log("getPrevData();");
-                            newData = addPrevData(series);
-                        } else if(e.altKey == true) {
-                            // alt click
-                            console.log("getNextData();");
-                            newData = addNextData(series);
+                        if (newCandles.length == 0) {
+                            $('#btnPrev').click();
                         }
 
+                        setTimestamp(newCandles);
+                        {#                        console.log(newCandles);#}
+                        chart.series[0].setData(newCandles);
+                        chart.hideLoading();
+                    }
+                });
+            });
+
+            $('#btnNext').click(function () {
+                chart.showLoading();
+                var targetDay = $('#fromDate').val().split("/");
+                targetDay = new Date(targetDay[2], targetDay[0], targetDay[1]);
+                targetDay = getDateByOffset(targetDay, 1);
+                targetDay = targetDay.getMonth() + "/" + targetDay.getDate() + "/" + targetDay.getFullYear();
+                $('#fromDate').val(targetDay);
+                $('#toDate').val(targetDay);
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/get_chart/',
+                    data: {
+                        subject_code: $('#input_subject_code').val(),
+                        chart_type: chartType,
+                        time_unit: timeUnit,
+                        start_date: targetDay,
+                        end_date: targetDay,
+                        indicators: [],
+                    },
+                    success: function (data) {
+                        var newCandles = data.candles;
+                        if (newCandles.length == 0) {
+                            $('#btnNext').click();
+                        }
+
+                        setTimestamp(newCandles);
+                        {#                        console.log(newCandles);#}
+                        chart.series[0].setData(newCandles);
+                        chart.hideLoading();
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#input_subject_code').on("input", function () {
+                var subject_code = $('#input_subject_code').val();
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/api/exist-table/' + subject_code,
+                    success: function (result) {
+                        if (result == 'True') {
+                            $('#input_subject_code').parent().removeClass('has-error');
+
+                            $.ajax({
+                                method: 'GET',
+                                url: '/api/' + subject_code + '/date',
+                                success: function (data) {
+                                    var start_date = new Date(data.start_date);
+                                    var end_date = new Date(data.end_date);
+                                    $('#fromDate').datepicker({
+                                        defaultDate: start_date,
+                                        minDate: start_date,
+                                        maxDate: end_date,
+                                        autoClose: true,
+                                    });
+
+                                    $('#toDate').datepicker({
+                                        defaultDate: end_date,
+                                        minDate: start_date,
+                                        maxDate: end_date,
+                                        autoClose: true,
+                                    });
+
+                                    var defaultFromDate = $('#fromDate').datepicker('option', 'defaultDate');
+                                    var defaultToDate = $('#toDate').datepicker('option', 'defaultDate');
+
+                                    $('#fromDate').val(defaultFromDate.getMonth() + 1 + "/" + defaultFromDate.getDate() + "/" + defaultFromDate.getFullYear());
+                                    $('#toDate').val(defaultToDate.getMonth() + 1 + "/" + defaultToDate.getDate() + "/" + defaultToDate.getFullYear());
+                                }
+                            });
+                        } else {
+                            $('#input_subject_code').parent().addClass('has-error');
+                        }
+                    }
+                });
+            });
+        });
+
+        $('#chartView').click(function () {
+                    /* 유효성 체크 */
+                if ($('#fromDate') == undefined || $('#toDate') == undefined ||
+                    $('#fromDate').val() == '' || $('#toDate').val() == '')
+                    return;
+
+                var start_date = $('#fromDate').val();
+                var end_date = $('#toDate').val();
+
+                if(chartType == 'tick' || chartType == 'min') {
+                    end_date = start_date;
+                }
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/get_chart/',
+                    data: {
+                        subject_code: $('#input_subject_code').val(),
+                        chart_type: chartType,
+                        time_unit: timeUnit,
+                        start_date: start_date,
+                        end_date: end_date,
+                        indicators: [],
+                    },
+                    success: function (data) {
+                        var candles = data.candles;
+                        initial_render_chart(candles);
+                    }
+                });
+            }
+        );
+
+        function initial_render_chart(data) {
+            var candle = data;
+            var indicators = data.indicators;
+
+            setTimestamp(candle);
+
+            // calc sma 30
+            // calcSma(candle, 30);
+            // calcSma(candle, 60);
+
+            // create the chart
+            Highcharts.setOptions({
+                time: {
+                    useUTC: false
+                }
+            });
+            chart = Highcharts.stockChart('container', {
+
+                chart: {
+                    type: 'candlestick',
+                    margin: [70, 50, 60, 80],
+                },
+                rangeSelector: {
+                    allButtonsEnabled: true,
+                    buttons: [{
+                        type: 'day',
+                        count: 1,
+                        text: 'Day'
+                    }, {
+                        type: 'week',
+                        count: 1,
+                        text: 'Week'
+                    }, {
+                        type: 'all',
+                        text: 'Month'
+                    }],
+                    buttonTheme: {
+                        width: 60
+                    },
+                    selected: 2
+                },
+
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        day: '%m/%e %H:%M'
+                    },
+                },
+
+                yAxis: {},
+
+                plotOptions: {
+                    series: {
+                        dataGrouping: {
+                            enabled: false
+                        }
+                    },
+                    candlestick: {
+                        lineColor: 'black',
+                        color: '#115BCB',
+                        upColor: '#E71909',
+                        lineWidth: 0.5,
+                        pointPadding: -0.29,
                     }
                 },
-            },
-            rangeSelector: {
-                allButtonsEnabled: true,
-                buttons: [{
-                    type: 'day',
-                    count: 1,
-                    text: 'Day'
-                }, {
-                    type: 'week',
-                    count: 1,
-                    text: 'Week'
-                }, {
-                    type: 'all',
-                    text: 'Month'
-                }],
-                buttonTheme: {
-                    width: 60
-                },
-                selected: 2
-            },
-
-            xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    day: '%m/%e %H:%M'
-                },
-{#                plotBands: [#}
-{#                    {#}
-{#                        from: 1510527600000,#}
-{#                        to: 1510742542000,#}
-{#                        color: '#E6F9FF'#}
-{#                    },#}
-{#                    {#}
-{#                        from: 1510742542000,#}
-{#                        to: 1511742542000,#}
-{#                        color: '#FFE5DB'#}
-{#                    }#}
-{#                ]#}
-            },
-
-            yAxis: {
-            },
-
-            plotOptions: {
-                series: {
+                series: [{
+                    type: 'candlestick',
+                    name: 'Gold Candlestick',
+                    //data: candle,
                     dataGrouping: {
                         enabled: false
                     }
-                },
-                candlestick: {
-                    lineColor: 'black',
-                    color: '#115BCB',
-                    upColor: '#E71909',
-                    lineWidth: 0.5,
-                    pointPadding: -0.29,
                 }
-            },
-            series: [{
-                type: 'candlestick',
-                name: 'Gold Candlestick',
-                data: candle,
-                dataGrouping: {
-                    enabled: false
-                }
-            }, {
-                type: 'line',
-                name: 'MA 30',
-                data: indicator.SMA[30],
-                dataGrouping: {
-                    enabled: false
-                },
-                color: 'red'
-            }, {
-                type: 'scatter',
-                name: 'MA 60',
-                data: indicator.SMA[60],
-                dataGrouping: {
-                    enabled: false
-                },
-                color: 'green',
-                marker: {
-                    radius: 1.5
-                }
-            }]
-        });
-    }
+                    /*
+                     , {
+                     type: 'line',
+                     name: 'MA 30',
+                     data: indicator.SMA[30],
+                     dataGrouping: {
+                     enabled: false
+                     },
+                     color: 'red'
+                     }, {
+                     type: 'scatter',
+                     name: 'MA 60',
+                     data: indicator.SMA[60],
+                     dataGrouping: {
+                     enabled: false
+                     },
+                     color: 'green',
+                     marker: {
+                     radius: 1.5
+                     }
+                     }
+                     */
+                ]
+            });
+            chart.showLoading();
+            chart.series[0].setData(candle);
+            chart.hideLoading();
+        }
 
-    function getDateByOffset(date, offset) {
-        var _date = new Date(date);
-        var _newDate = new Date(date);
-        _newDate.setDate(_date.getDate() + offset);
-        return _newDate;
-    }
+        function getDateByOffset(date, offset) {
+            var _date = new Date(date);
+            var _newDate = new Date(date);
+            _newDate.setDate(_date.getDate() + offset);
+            return _newDate;
+        }
 
-    function setTimestamp(candle) {
-        for (var i = 1; i < candle.length; i++) {
-            if (Math.round(candle[i][0] / 1000) == Math.round(candle[i - 1][0] / 1000)) {
-                candle[i][0] = candle[i - 1][0] + 1;
+        function setTimestamp(candle) {
+            for (var i = 1; i < candle.length; i++) {
+                if (Math.round(candle[i][0] / 1000) == Math.round(candle[i - 1][0] / 1000)) {
+                    candle[i][0] = candle[i - 1][0] + 1;
+                }
             }
         }
-    }
 
-    function calcSma(candle, period) {
-        var sum = 0;
-        if (!(period in indicator.SMA)) indicator.SMA[period] = []
+        function calcSma(candle, period) {
+            var sum = 0;
+            if (!(period in indicator.SMA)) indicator.SMA[period] = []
 
-        for (var i = 0; i < candle.length; i++) {
-            sum = sum + candle[i][4];
-            value = []
-            value[0] = candle[i][0];
-            if (i >= period - 1) {
-                value[1] = sum / period;
-                sum -= (candle[i - period + 1][4]);
-            } else {
-                value[1] = null;
-            }
-            indicator.SMA[period][i] = value;
-        }
-    }
-
-    Array.prototype.getIndexBy = function (name, value) {
-        for (var i = 0; i < this.length; i++) {
-            if (this[i][name] == value) {
-                return i;
+            for (var i = 0; i < candle.length; i++) {
+                sum = sum + candle[i][4];
+                value = []
+                value[0] = candle[i][0];
+                if (i >= period - 1) {
+                    value[1] = sum / period;
+                    sum -= (candle[i - period + 1][4]);
+                } else {
+                    value[1] = null;
+                }
+                indicator.SMA[period][i] = value;
             }
         }
-        return -1;
-    }
 
-    var indicator = {
-        SMA: {},
-    };
+        Array.prototype.getIndexBy = function (name, value) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i][name] == value) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        var indicator = {
+            SMA: {},
+        };
 
 
-
-
-
-
-</script>
+    </script>
 
 {% endblock %}
